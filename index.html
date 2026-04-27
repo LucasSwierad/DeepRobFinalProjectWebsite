@@ -517,6 +517,34 @@
   </div>
 </div>
 
+<hr class="section-rule" />
+<section id="overview">
+  <h2>Motivation & Overview</h2>
+
+  <p>
+    4D Gaussian Splatting (4DGS) models dynamic scenes by coupling canonical Gaussians with a time-dependent deformation network — but applies deformation uniformly to every Gaussian, including those representing static regions.
+  </p>
+
+  <p>
+    In real scenes, only a small fraction is dynamic. Treating all Gaussians identically wastes representational capacity and prevents identifying which parts of the scene are actually moving.
+  </p>
+
+  <p>
+    <strong>Our solution:</strong> a lightweight motion-mask head that predicts a per-Gaussian soft gate <em>m<sub>i</sub>(t)</em> ∈ (0,1), controlling how much each Gaussian deforms — learned fully without supervision.
+  </p>
+
+  <p>
+    <strong>Results at a glance:</strong><br>
+    +0.28 dB PSNR (BouncingBalls) · +0.22 dB (JumpingJacks)<br>
+    SSIM 0.9943 → 0.9947 · LPIPS-Alex −16%
+  </p>
+
+  <!-- IMAGE PLACEHOLDER -->
+  <div style="height:300px;background:#eee;border:1px dashed #bbb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+    Overview figure placeholder
+  </div>
+</section>
+
 <!-- ── ABSTRACT ── -->
 <hr class="section-rule" />
 <section id="abstract">
@@ -566,6 +594,18 @@
   <div class="prototype-note">
     <strong>Discarded prototype:</strong> An earlier sparsity-only prototype used a penalty ℒ<sub>sparse</sub> = (1/N) Σ m<sub>i</sub>(t) that drove all masks toward zero (all-static collapse) and was discarded. It is not part of the final method.
   </div>
+
+  <h3 style="margin-top:2rem;">Architecture: Motion Mask Integration</h3>
+
+<p>
+  The motion mask head is appended to the deformation decoder. The shared hidden feature feeds four heads:
+  position, rotation, scale, and motion mask.
+</p>
+
+<!-- IMAGE PLACEHOLDER -->
+<div style="height:320px;background:#eee;border:1px dashed #bbb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+  Architecture diagram placeholder
+</div>
 
   <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">Training Objective</h3>
   <p>
@@ -617,6 +657,27 @@
   <p style="font-size:0.9rem; color: var(--text-muted);">
     We compare: <strong>Baseline</strong> (original 4DGS); <strong>Reg-A</strong> (λ<sub>static</sub> = 1×10⁻³, λ<sub>bin</sub> = 1×10⁻³); <strong>Reg-B</strong> (λ<sub>static</sub> = 2×10⁻³, λ<sub>bin</sub> = 1×10⁻³); <strong>Reg-C</strong> (λ<sub>static</sub> = 2×10⁻³, λ<sub>bin</sub> = 2×10⁻³); and <strong>Over-reg</strong> (λ<sub>static</sub> = 1×10⁻², λ<sub>bin</sub> = 1×10⁻³) as a collapse sanity check.
   </p>
+  <h3 style="margin-top:2rem;">Regularization Settings</h3>
+
+<ul class="finding-list">
+  <li><strong>Reg-A:</strong> λ_static = 1e-3, λ_bin = 1e-3 — mild regularization</li>
+  <li><strong>Reg-B:</strong> λ_static = 2e-3, λ_bin = 1e-3 — stronger static penalty</li>
+  <li><strong>Reg-C:</strong> λ_static = 2e-3, λ_bin = 2e-3 — stronger on both</li>
+  <li><strong>Over-reg:</strong> λ_static = 1e-2 — collapse sanity check</li>
+</ul>
+
+  <h3 style="margin-top:2rem;">Baseline Scene Renders</h3>
+
+<div class="viz-grid">
+  <div class="viz-item">
+    <div style="height:180px;background:#eee;"></div>
+    <p class="viz-caption">BouncingBalls (ground truth)</p>
+  </div>
+  <div class="viz-item">
+    <div style="height:180px;background:#eee;"></div>
+    <p class="viz-caption">JumpingJacks (ground truth)</p>
+  </div>
+</div>
 
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('bouncingballs', this)">BouncingBalls</button>
@@ -719,19 +780,32 @@
   </ul>
 </section>
 
+<section>
+  <h2>Key Finding: Quality vs. Separability</h2>
+
+  <p>
+    The hyperparameters that maximize reconstruction quality do not match those that maximize motion-mask separability.
+  </p>
+
+  <ul class="finding-list">
+    <li><strong>Reg-A:</strong> stable improvements across both scenes</li>
+    <li><strong>Reg-B:</strong> best PSNR and best separation</li>
+    <li><strong>Reg-C:</strong> best perceptual metrics but weaker generalization</li>
+    <li><strong>Over-reg:</strong> collapse to all-dynamic</li>
+  </ul>
+</section>
+
 <!-- ── DISCUSSION ── -->
-<hr class="section-rule" />
-<section id="discussion">
-  <h2>Discussion &amp; Limitations</h2>
-  <p>
-    The motion-mask extension provides two concrete benefits. First, with appropriate regularization it yields modest but consistent improvements in reconstruction quality on strongly dynamic scenes (+0.28 dB PSNR on BouncingBalls, +0.22 dB on JumpingJacks at best settings). Second, the red/blue PLY exports and JSONL diagnostics give an interpretable window into which Gaussians the model treats as dynamic, something the baseline provides no access to.
-  </p>
-  <p>
-    The principal architectural limitation relative to a full per-Gaussian decoupling framework such as SDD-4DGS is that our mask is predicted from the shared feature and does not persist between iterations in a way that can be directly pruned or edited downstream. A more sophisticated formulation — perhaps with an annealed regularization schedule or a dedicated mask-refinement phase — may be needed to close the gap between reconstruction quality and mask separability.
-  </p>
-  <p>
-    An earlier approach explored coupling an external segmentation pipeline (GroundingDINO + SAM2) with an Instant-NGP-style 3D backbone. That approach relies on prompt-based segmentation that can be temporally inconsistent, and the masks are external to the differentiable reconstruction pipeline and cannot be refined by gradient-based training — motivating the fully-integrated approach presented here.
-  </p>
+<section id="conclusion">
+  <h2>Conclusions & Future Work</h2>
+
+  <ul class="finding-list">
+    <li><strong>Consistent reconstruction gains</strong> across PSNR, SSIM, and LPIPS on dynamic scenes.</li>
+    <li><strong>Interpretable motion localization</strong> via mask visualization and diagnostics.</li>
+    <li><strong>Lightweight design</strong> — no modification to Gaussian lifecycle or optimizer.</li>
+    <li><strong>Tradeoff discovered:</strong> reconstruction quality vs. mask separability.</li>
+    <li><strong>Future work:</strong> annealed λ schedule, mask refinement phase, real-world scenes.</li>
+  </ul>
 </section>
 
 <!-- ── RELATED LINKS ── -->
@@ -772,7 +846,7 @@
 <pre>@article{ren2025motionaware4dgs,
   author    = {Ren, Yuan and Taylor, Ben and Swierad, Lucas},
   title     = {Motion-Aware Regularization via Soft Mask Gating for 4D Gaussian Splatting},
-  year      = {2025},
+  year      = {2026},
   note      = {ROB 430 Final Project, University of Michigan},
   url       = {https://github.com/yuanren114514/ROB_430_Final_Project},
 }</pre>
