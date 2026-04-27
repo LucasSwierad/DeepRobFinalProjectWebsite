@@ -472,6 +472,22 @@
       color: #5a4000;
       margin-top: 1rem;
     }
+
+    .diagram-wrap {
+  margin-top: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.diagram-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
   </style>
 </head>
 <body>
@@ -599,8 +615,8 @@
 </p>
 
 <!-- IMAGE PLACEHOLDER -->
-<div style="height:320px;background:#eee;border:1px dashed #bbb;border-radius:8px;display:flex;align-items:center;justify-content:center;">
-  <img src="Diagram.drawio.png" alt="diagram" style="min-height:120px;">
+<div class="diagram-wrap">
+  <img src="Diagram.drawio.png" alt="diagram">
 </div>
 
   <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">Training Objective</h3>
