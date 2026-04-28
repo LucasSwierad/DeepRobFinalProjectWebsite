@@ -567,8 +567,18 @@
   </p>
 
   <p>
-    Experimental results on D-NeRF synthetic scenes demonstrate modest improvements in reconstruction quality, notably achieving a <strong>+0.28 dB PSNR gain on the BOUNCINGBALLS scene</strong> and <strong>+0.22 dB on JUMPINGJACKS</strong>. While the method shows that reconstruction quality and motion-mask transparency are related, we observe that stronger regularization can improve mask diagnostics even when image quality gains are marginal. This work provides a foundation for more efficient, motion-aware spatiotemporal modeling without the need for manual annotations.
-  </p>
+Experiments on D-NeRF scenes show that the proposed
+method can modestly improve reconstruction on strongly dynamic
+synthetic scenes, with up to +0.28 dB PSNR on BOUNCINGBALLS
+and +0.22 dB on JUMPINGJACKS. However, the method does
+not produce universal reconstruction gains: on the real-world
+HyperNeRF CHICKCHICKEN scene, baseline 4DGS remains
+slightly better on the main image metrics. The results also
+show that reconstruction quality and motion-mask separability
+are related but not identical objectives. A near-binary mask is
+not always required for better reconstruction, while stronger
+regularization can improve mask diagnostics without improving
+image quality.  </p>
 </section>
 
 <!-- ── METHOD ── -->
