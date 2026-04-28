@@ -722,6 +722,7 @@
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('bouncingballs', this)">BouncingBalls</button>
     <button class="tab-btn" onclick="showTab('jumpingjacks', this)">JumpingJacks</button>
+    <button class="tab-btn" onclick="showTab('hypernerf', this)">Hypernerf</button>
   </div>
 
   <!-- BOUNCINGBALLS -->
@@ -756,43 +757,8 @@
         </tbody>
       </table>
     </div>
-    <p class="table-caption">Reg-B shows the clearest static/dynamic separation (highest dynamic fraction and mask spread). Reg-C, despite its better reconstruction scores, produces a more conservative and compressed mask — illustrating the reconstruction–separability tradeoff.</p>
 
-    <h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion Mask Visualizations</h3>
-    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">
-      Red/blue PLY exports: <strong style="color:#e040fb">red = high mask (dynamic)</strong>, <strong style="color:#5c6bc0">blue = low mask (static)</strong>.
-    </p>
-    <div class="viz-grid">
-      <div class="viz-item">
-        <img src="finalproject_image1.png" alt="BouncingBalls Reg-A visualization" style="min-height:120px;">
-        <p class="viz-caption">Reg-A: λ<sub>s</sub>=1e-3, λ<sub>b</sub>=1e-3</p>
-      </div>
-      <div class="viz-item">
-        <img src="finalproject_image2.png" alt="BouncingBalls Reg-B visualization" style="min-height:120px;">
-        <p class="viz-caption">Reg-B: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=1e-3</p>
-      </div>
-      <div class="viz-item">
-        <img src="finalproject_image3.png" alt="BouncingBalls Reg-C visualization" style="min-height:120px;">
-        <p class="viz-caption">Reg-C: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=2e-3</p>
-      </div>
-      <div class="viz-item">
-        <img src="finalproject_image4.png" alt="BouncingBalls Reg-A alt view" style="min-height:120px;">
-        <p class="viz-caption">Reg-A alt view</p>
-      </div>
-      <div class="viz-item">
-        <img src="finalproject_image5.png" alt="BouncingBalls Reg-B alt view" style="min-height:120px;">
-        <p class="viz-caption">Reg-B alt view</p>
-      </div>
-      <div class="viz-item">
-        <img src="finalproject_image6.png" alt="BouncingBalls Reg-C alt view" style="min-height:120px;">
-        <p class="viz-caption">Reg-C alt view</p>
-      </div>
-    </div>
-    
-
-  </div>
-
-  <!-- JUMPINGJACKS -->
+    <!-- JUMPINGJACKS -->
   <div class="tab-panel" id="tab-jumpingjacks">
     <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">
       D-NeRF human-motion synthetic scene. Reg-A and Reg-B both improve over baseline. Reg-C — which was best for BouncingBalls reconstruction — returns to near-baseline quality, illustrating scene-dependent behavior. The most robust single hyperparameter choice across both scenes is <strong>Reg-B</strong> (λ<sub>static</sub>=2×10⁻³, λ<sub>bin</sub>=1×10⁻³).
@@ -862,6 +828,43 @@
     The proposed method does not improve PSNR or LPIPS on this real-world scene. However, mask diagnostics still show stronger static–dynamic separation under higher regularization.
   </p>
 </div>
+    <p class="table-caption">Reg-B shows the clearest static/dynamic separation (highest dynamic fraction and mask spread). Reg-C, despite its better reconstruction scores, produces a more conservative and compressed mask — illustrating the reconstruction–separability tradeoff.</p>
+
+    <h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion Mask Visualizations</h3>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">
+      Red/blue PLY exports: <strong style="color:#e040fb">red = high mask (dynamic)</strong>, <strong style="color:#5c6bc0">blue = low mask (static)</strong>.
+    </p>
+    <div class="viz-grid">
+      <div class="viz-item">
+        <img src="finalproject_image1.png" alt="BouncingBalls Reg-A visualization" style="min-height:120px;">
+        <p class="viz-caption">Reg-A: λ<sub>s</sub>=1e-3, λ<sub>b</sub>=1e-3</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image2.png" alt="BouncingBalls Reg-B visualization" style="min-height:120px;">
+        <p class="viz-caption">Reg-B: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=1e-3</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image3.png" alt="BouncingBalls Reg-C visualization" style="min-height:120px;">
+        <p class="viz-caption">Reg-C: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=2e-3</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image4.png" alt="BouncingBalls Reg-A alt view" style="min-height:120px;">
+        <p class="viz-caption">Reg-A alt view</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image5.png" alt="BouncingBalls Reg-B alt view" style="min-height:120px;">
+        <p class="viz-caption">Reg-B alt view</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image6.png" alt="BouncingBalls Reg-C alt view" style="min-height:120px;">
+        <p class="viz-caption">Reg-C alt view</p>
+      </div>
+    </div>
+    
+
+  </div>
+
+  
 
   <!-- SUMMARY FINDINGS -->
   <h3 style="font-size:1.1rem;font-weight:600;margin:2.5rem 0 0.8rem;">Key Findings</h3>
