@@ -742,7 +742,8 @@
         </tbody>
       </table>
     </div>
-    <p class="table-caption">Best per column in bold blue. Over-reg collapses to all-dynamic...</p>
+    <p class="table-caption">Reg-B shows the clearest static/dynamic separation (highest dynamic fraction and mask spread). Reg-C, despite its better reconstruction scores, produces a more conservative and compressed mask — illustrating the reconstruction–separability tradeoff.</p>
+
 
     <h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion-Mask Diagnostics (end of training)</h3>
     <div class="table-wrap">
@@ -827,8 +828,7 @@
     The proposed method does not improve PSNR or LPIPS on this real-world scene. However, mask diagnostics still show stronger static–dynamic separation under higher regularization.
   </p>
 </div>
-    <p class="table-caption">Reg-B shows the clearest static/dynamic separation (highest dynamic fraction and mask spread). Reg-C, despite its better reconstruction scores, produces a more conservative and compressed mask — illustrating the reconstruction–separability tradeoff.</p>
-
+    
     <h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion Mask Visualizations</h3>
     <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">
       Red/blue PLY exports: <strong style="color:#e040fb">red = high mask (dynamic)</strong>, <strong style="color:#5c6bc0">blue = low mask (static)</strong>.
