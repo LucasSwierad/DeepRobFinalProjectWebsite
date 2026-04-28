@@ -926,27 +926,31 @@
   <h2>Conclusions & Future Work</h2>
 
   <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">
-  Comparison with SDD-4DGS
-</h3>
+    Comparison with SDD-4DGS
+  </h3>
 
-<p>
-  SDD-4DGS proposes a more explicit static–dynamic decomposition by assigning a persistent dynamic coefficient to each Gaussian and redesigning the representation accordingly. In contrast, our method predicts a motion coefficient from the shared deformation feature at each forward pass.
-</p>
+  <p>
+    SDD-4DGS proposes a more explicit static–dynamic decomposition by assigning a persistent dynamic coefficient to each Gaussian and redesigning the representation accordingly. In contrast, our method predicts a motion coefficient from the shared deformation feature at each forward pass.
+  </p>
 
-<p>
-  This difference leads to a tradeoff. SDD-4DGS reports larger and more consistent reconstruction improvements, likely due to its stronger structural decoupling. Our approach, however, is significantly simpler: it requires only a lightweight additional head and does not modify Gaussian storage, cloning, pruning, or optimizer state.
-</p>
+  <p>
+    This difference leads to a tradeoff. SDD-4DGS reports larger and more consistent reconstruction improvements, likely due to its stronger structural decoupling. Our approach, however, is significantly simpler: it requires only a lightweight additional head and does not modify Gaussian storage, cloning, pruning, or optimizer state.
+  </p>
 
-<p>
-  As a result, the proposed method can be integrated into existing 4DGS pipelines with minimal engineering overhead, but achieves more modest and scene-dependent reconstruction gains.
-</p>
+  <p>
+    As a result, the proposed method can be integrated into existing 4DGS pipelines with minimal engineering overhead, but achieves more modest and scene-dependent reconstruction gains.
+  </p>
 
   <ul class="finding-list">
-    <li><strong>Consistent reconstruction gains</strong> across PSNR, SSIM, and LPIPS on dynamic scenes.</li>
-    <li><strong>Interpretable motion localization</strong> via mask visualization and diagnostics.</li>
-    <li><strong>Lightweight design</strong> — no modification to Gaussian lifecycle or optimizer.</li>
-    <li><strong>Tradeoff discovered:</strong> reconstruction quality vs. mask separability.</li>
-    <li><strong>Future work:</strong> annealed λ schedule, mask refinement phase, real-world scenes.</li>
+    <li><strong>Modest Reconstruction Gains</strong> — Our method provides real improvements on strongly dynamic D-NeRF scenes, though baseline 4DGS remains slightly better on real-world HyperNeRF data.</li>
+    
+    <li><strong>Interpretable Motion Localization</strong> — Stronger regularization produces cleaner internal mask diagnostics and a useful view of dynamic scene structure, even when image metrics don't improve.</li>
+    
+    <li><strong>Lightweight Design</strong> — Successfully integrated a motion-aware soft mask with limited architectural changes and zero modifications to the Gaussian lifecycle or optimizer.</li>
+    
+    <li><strong>Identifiability Tradeoff</strong> — Results confirm that unsupervised static-dynamic separation is underconstrained when supervised only by image reconstruction; quality and interpretability are not always optimized by the same setting.</li>
+    
+    <li><strong>Future Work</strong> — Exploring annealed &lambda; schedules to stabilize early training and a dedicated mask refinement phase to better handle real-world scene complexities.</li>
   </ul>
 </section>
 
