@@ -549,11 +549,6 @@
     <strong>Our solution:</strong> a lightweight motion-mask head that predicts a per-Gaussian soft gate <em>m<sub>i</sub>(t)</em> ∈ (0,1), controlling how much each Gaussian deforms — learned fully without supervision.
   </p>
 
-  <p>
-    <strong>Results at a glance:</strong><br>
-    +0.28 dB PSNR (BouncingBalls) · +0.22 dB (JumpingJacks)<br>
-    SSIM 0.9943 → 0.9947 · LPIPS-Alex −16%
-  </p>
 
 </section>
 
@@ -562,16 +557,17 @@
 <section id="abstract">
   <h2>Abstract</h2>
   <p>
-    This project studies motion-aware dynamic scene reconstruction built on top of the 4D Gaussian Splatting (4DGS) framework. The original 4DGS method models time-varying scenes through a HexPlane-based deformation network applied to canonical Gaussians, but does not explicitly distinguish which Gaussians should remain static and which should participate in motion.
+    This project studies motion-aware dynamic scene reconstruction built on top of the <strong>4D Gaussian Splatting (4DGS)</strong> framework. The system takes a set of images with associated camera poses and timestamps as input and outputs a 4D Gaussian representation enabling novel-view rendering over time. While the baseline 4DGS model represents dynamic scenes by predicting time-dependent deformations for all Gaussian primitives in a canonical space, it lacks an explicit mechanism to distinguish between static and moving elements.
   </p>
+
+  
+
   <p>
-    To address this gap, we implement a lightweight <em>motion-mask branch</em> inside the deformation network. The mask predicts a per-Gaussian soft coefficient in [0, 1] that gates positional (and optionally scale/rotation) deformation, learned jointly with reconstruction and without any ground-truth motion supervision.
+    To address this, we introduce a <strong>lightweight motion-mask branch</strong> within the 4DGS deformation network. This mask acts as a learned scalar gate that modulates deformation strength and is optimized jointly with image reconstruction. Our method is <strong>fully unsupervised</strong>: it requires no ground-truth motion labels or external segmentation. Instead, it guides the learning process through a combination of the standard reconstruction objective and two novel regularizers: a <strong>binarization loss</strong> and a <strong>static-deformation loss</strong>.
   </p>
+
   <p>
-    We further augment training with two regularization terms: a <strong>binarization loss</strong> that pushes the mask toward {0, 1}, and a <strong>static-deformation loss</strong> that penalizes large deformations on low-mask Gaussians. An earlier sparsity-only prototype proved unstable and was discarded; the final regularized formulation consistently improves reconstruction on strongly dynamic D-NeRF scenes.
-  </p>
-  <p>
-    On <strong>BouncingBalls</strong>, the best setting improves PSNR from 40.68 dB to 40.96 dB and SSIM from 0.9943 to 0.9947 while also producing interpretable soft motion localization. On <strong>JumpingJacks</strong>, PSNR improves from 35.40 dB to 35.62 dB. Experiments reveal a scene-dependent tradeoff between reconstruction quality and mask separability, motivating future work on adaptive regularization schedules.
+    Experimental results on D-NeRF synthetic scenes demonstrate modest improvements in reconstruction quality, notably achieving a <strong>+0.28 dB PSNR gain on the BOUNCINGBALLS scene</strong> and <strong>+0.22 dB on JUMPINGJACKS</strong>. While the method shows that reconstruction quality and motion-mask transparency are related, we observe that stronger regularization can improve mask diagnostics even when image quality gains are marginal. This work provides a foundation for more efficient, motion-aware spatiotemporal modeling without the need for manual annotations.
   </p>
 </section>
 
@@ -593,19 +589,9 @@
     Because the mask is predicted from the shared feature rather than stored as a persistent per-Gaussian parameter, it requires no modification to Gaussian cloning, pruning, optimizer-state management, or checkpoint serialization — it is a drop-in addition of a single MLP head.
   </p>
 
-  <div class="method-diagram">
-    <div style="color:#6b9e6b;margin-bottom:1rem;font-family:var(--sans);font-size:0.9rem;font-weight:600;">Motion-Mask Forward Path (scene/deformation.py)</div>
-    <div class="pipeline-step"><span class="step-num">1</span><span class="step-text">Start from canonical Gaussian attributes: position, scale, rotation, opacity, SH color.</span></div>
-    <div class="pipeline-step"><span class="step-num">2</span><span class="step-text">Query HexPlane field at canonical position and timestamp → spatiotemporal feature <span class="step-code">F_i(t)</span>.</span></div>
-    <div class="pipeline-step"><span class="step-num">3</span><span class="step-text">Project HexPlane feature through shared MLP → hidden feature <span class="step-code">h_i(t) = hidden</span>.</span></div>
-    <div class="pipeline-step"><span class="step-num">4</span><span class="step-text">Predict deformation heads (Δμ, Δs, Δr) <strong>and</strong> motion mask: <span class="step-code">motion_mask = torch.sigmoid(self.motion_mask_deform(hidden))</span></span></div>
-    <div class="pipeline-step"><span class="step-num">5</span><span class="step-text">Apply gated deformation: <span class="step-code">pts = pts_canonical + motion_mask * dx</span></span></div>
-    <div class="pipeline-step"><span class="step-num">6</span><span class="step-text">Rasterize deformed Gaussians and compute image reconstruction loss.</span></div>
-  </div>
+  
 
-  <div class="prototype-note">
-    <strong>Discarded prototype:</strong> An earlier sparsity-only prototype used a penalty ℒ<sub>sparse</sub> = (1/N) Σ m<sub>i</sub>(t) that drove all masks toward zero (all-static collapse) and was discarded. It is not part of the final method.
-  </div>
+ 
 
   <h3 style="margin-top:2rem;">Architecture: Motion Mask Integration</h3>
 
@@ -618,6 +604,16 @@
 <div class="diagram-wrap">
   <img src="Diagram.drawio.png" alt="diagram">
 </div>
+
+<div class="method-diagram">
+    <div style="color:#6b9e6b;margin-bottom:1rem;font-family:var(--sans);font-size:0.9rem;font-weight:600;">Motion-Mask Forward Path (scene/deformation.py)</div>
+    <div class="pipeline-step"><span class="step-num">1</span><span class="step-text">Start from canonical Gaussian attributes: position, scale, rotation, opacity, SH color.</span></div>
+    <div class="pipeline-step"><span class="step-num">2</span><span class="step-text">Query HexPlane field at canonical position and timestamp → spatiotemporal feature <span class="step-code">F_i(t)</span>.</span></div>
+    <div class="pipeline-step"><span class="step-num">3</span><span class="step-text">Project HexPlane feature through shared MLP → hidden feature <span class="step-code">h_i(t) = hidden</span>.</span></div>
+    <div class="pipeline-step"><span class="step-num">4</span><span class="step-text">Predict deformation heads (Δμ, Δs, Δr) <strong>and</strong> motion mask: <span class="step-code">motion_mask = torch.sigmoid(self.motion_mask_deform(hidden))</span></span></div>
+    <div class="pipeline-step"><span class="step-num">5</span><span class="step-text">Apply gated deformation: <span class="step-code">pts = pts_canonical + motion_mask * dx</span></span></div>
+    <div class="pipeline-step"><span class="step-num">6</span><span class="step-text">Rasterize deformed Gaussians and compute image reconstruction loss.</span></div>
+  </div>
 
   <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">Training Objective</h3>
   <p>
@@ -635,6 +631,9 @@
       <div class="formula">ℒ_static = (1/N) Σ (1 − m_i(t)) ‖Δμ_i(t)‖²</div>
       <p>Penalizes large positional deformations for Gaussians the mask identifies as static (m<sub>i</sub> ≈ 0).</p>
     </div>
+  </div>
+   <div class="prototype-note">
+    <strong>Discarded prototype:</strong> An earlier sparsity-only prototype used a penalty ℒ<sub>sparse</sub> = (1/N) Σ m<sub>i</sub>(t) that drove all masks toward zero (all-static collapse) and was discarded. It is not part of the final method.
   </div>
 
   <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">
@@ -674,9 +673,30 @@
   </div>
 
   <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">Diagnostics &amp; Tooling</h3>
-  <p>
-    To analyze mask behavior throughout training we added: per-iteration logging of mean, standard deviation, dynamic fraction, and fraction above 0.4 to a JSONL file; TensorBoard histograms of the mask distribution; red/blue PLY exports coloring dynamic Gaussians red and static ones blue; and a standalone comparison script (<code>compare_motion_separation.py</code>) that runs both conditions back-to-back and reports per-metric deltas.
-  </p>
+<p>
+  Since the system operates without ground-truth motion masks, we implemented a suite of diagnostic tools to monitor the emergence of static-dynamic separation. The training pipeline logs per-iteration mask statistics to <code>motion_mask_stats.jsonl</code>, tracking variables such as:
+</p>
+
+<ul style="margin-bottom: 1.5rem; line-height: 1.6;">
+  <li><strong>Mean &amp; Std Dev:</strong> Overall distribution of the learned gate values.</li>
+  <li><strong>Dynamic Fraction:</strong> The percentage of the scene identified as moving, specifically the fraction where $m > 0.4$.</li>
+  <li><strong>Loss Components:</strong> Real-time values for the static-deformation and binarization regularizers.</li>
+</ul>
+
+<p>
+  To analyze spatial behavior, the method exports specialized <strong>color-coded PLY point clouds</strong>. In these files, the RGB channels are mapped to mask intensity: <strong style="color: #d32f2f;">Red</strong> indicates high motion-mask values (predicted dynamic regions), while <strong style="color: #1976d2;">Blue</strong> indicates low values (predicted static regions). 
+</p>
+
+<blockquote>
+  <strong>Note:</strong> These visualizations are diagnostic tools for analyzing model behavior and should not be interpreted as ground-truth semantic segmentation labels.
+</blockquote>
+
+<div class="link-buttons" style="margin-top: 1.5rem;">
+  <a href="https://github.com/yuanren114514/ROB_430_Final_Project/blob/main/utils/mask_logger.py" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; margin-right:6px; vertical-align:middle;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+    View <code>mask_logger.py</code> source
+  </a>
+</div>
 </section>
 
 <!-- ── RESULTS ── -->
