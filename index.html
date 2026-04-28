@@ -929,36 +929,80 @@
 </section>
 
 <!-- ── DISCUSSION ── -->
-<section id="conclusion">
-  <h2>Conclusions & Future Work</h2>
-
-  <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">
-    Comparison with SDD-4DGS
-  </h3>
+<hr class="section-rule" />
+<section id="results">
+  <h2>Key Findings & Analysis</h2>
 
   <p>
-    SDD-4DGS proposes a more explicit static–dynamic decomposition by assigning a persistent dynamic coefficient to each Gaussian and redesigning the representation accordingly. In contrast, our method predicts a motion coefficient from the shared deformation feature at each forward pass.
+    Our experiments reveal a nuanced relationship between <strong>motion-aware regularization</strong> and <strong>reconstruction fidelity</strong>. While the gated mask provides an interpretable diagnostic of scene dynamics, "cleaner" masks do not always translate to higher PSNR.
   </p>
 
-  <p>
-    This difference leads to a tradeoff. SDD-4DGS reports larger and more consistent reconstruction improvements, likely due to its stronger structural decoupling. Our approach, however, is significantly simpler: it requires only a lightweight additional head and does not modify Gaussian storage, cloning, pruning, or optimizer state.
-  </p>
+  <h3 style="font-size:1.1rem;font-weight:600;margin:1.5rem 0 1rem;">Quantitative Performance</h3>
+  <div style="overflow-x: auto; margin-bottom: 2rem;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+      <thead>
+        <tr style="border-bottom: 2px solid var(--border); background: #f9f9f7;">
+          <th style="padding: 12px;">Scene</th>
+          <th style="padding: 12px;">Metric</th>
+          <th style="padding: 12px;">Baseline 4DGS</th>
+          <th style="padding: 12px;">Ours (Reg-B)</th>
+          <th style="padding: 12px;">Delta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 12px; font-weight: 600;">BOUNCINGBALLS</td>
+          <td style="padding: 12px;">PSNR (dB) ↑</td>
+          <td style="padding: 12px;">40.67</td>
+          <td style="padding: 12px; color: #2e7d32; font-weight: 600;">40.96</td>
+          <td style="padding: 12px; color: #2e7d32;">+0.28</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 12px; font-weight: 600;">JUMPINGJACKS</td>
+          <td style="padding: 12px;">PSNR (dB) ↑</td>
+          <td style="padding: 12px;">35.40</td>
+          <td style="padding: 12px; color: #2e7d32; font-weight: 600;">35.62</td>
+          <td style="padding: 12px; color: #2e7d32;">+0.22</td>
+        </tr>
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 12px; font-weight: 600;">CHICKCHICKEN</td>
+          <td style="padding: 12px;">PSNR (dB) ↑</td>
+          <td style="padding: 12px; font-weight: 600;">26.91</td>
+          <td style="padding: 12px;">26.87</td>
+          <td style="padding: 12px; color: #d32f2f;">-0.04</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <p>
-    As a result, the proposed method can be integrated into existing 4DGS pipelines with minimal engineering overhead, but achieves more modest and scene-dependent reconstruction gains.
-  </p>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+    
+    <div style="background: #fdfdfd; border: 1px solid var(--border); padding: 1.2rem; border-radius: 8px;">
+      <h4 style="margin-top:0; color: #444; font-size: 1rem;">1. Dynamic Scene Gains</h4>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 0;">
+        On synthetic scenes with high-velocity motion (D-NeRF), the motion mask successfully isolates moving primitives, providing modest reconstruction gains by preventing "motion bleed" into static areas.
+      </p>
+    </div>
 
-  <ul class="finding-list">
-    <li><strong>Modest Reconstruction Gains</strong> — Our method provides real improvements on strongly dynamic D-NeRF scenes, though baseline 4DGS remains slightly better on real-world HyperNeRF data.</li>
-    
-    <li><strong>Interpretable Motion Localization</strong> — Stronger regularization produces cleaner internal mask diagnostics and a useful view of dynamic scene structure, even when image metrics don't improve.</li>
-    
-    <li><strong>Lightweight Design</strong> — Successfully integrated a motion-aware soft mask with limited architectural changes and zero modifications to the Gaussian lifecycle or optimizer.</li>
-    
-    <li><strong>Identifiability Tradeoff</strong> — Results confirm that unsupervised static-dynamic separation is underconstrained when supervised only by image reconstruction; quality and interpretability are not always optimized by the same setting.</li>
-    
-    <li><strong>Future Work</strong> — Exploring annealed &lambda; schedules to stabilize early training and a dedicated mask refinement phase to better handle real-world scene complexities.</li>
-  </ul>
+    <div style="background: #fdfdfd; border: 1px solid var(--border); padding: 1.2rem; border-radius: 8px;">
+      <h4 style="margin-top:0; color: #444; font-size: 1rem;">2. The Real-World Challenge</h4>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 0;">
+        In real-world captures like <em>ChickChicken</em>, baseline 4DGS remains slightly superior. Complex lighting and capture artifacts can cause the unsupervised mask to misidentify noise as motion, leading to slight PSNR drops.
+      </p>
+    </div>
+
+    <div style="background: #fdfdfd; border: 1px solid var(--border); padding: 1.2rem; border-radius: 8px;">
+      <h4 style="margin-top:0; color: #444; font-size: 1rem;">3. Quality vs. Separability</h4>
+      <p style="font-size: 0.9rem; color: #666; margin-bottom: 0;">
+        We found that <strong>reconstruction quality and mask separability are distinct objectives</strong>. A perfectly binary (Red/Blue) mask isn't always required for the best visual output; often, a "soft" gate yields better gradients for optimization.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="prototype-note" style="margin-top: 2rem;">
+    <strong>Conclusion:</strong> Unsupervised static-dynamic separation remains an underconstrained problem when supervised solely by image reconstruction. However, our gated approach provides a viable, lightweight path toward more interpretable 4D representations.
+  </div>
 </section>
 
 <!-- ── RELATED LINKS ── -->
