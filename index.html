@@ -691,88 +691,219 @@
 <!-- ── RESULTS ── -->
 <hr class="section-rule" />
 <section id="results">
-  <h2>Experimental Results</h2>
+  <h2>Results</h2>
   <p>
-    We evaluated our method across two synthetic D-NeRF scenes (<strong>BouncingBalls</strong>, <strong>JumpingJacks</strong>) and one real-world HyperNeRF scene (<strong>ChickChicken</strong>). Our findings indicate that while motion-aware gating improves metrics in controlled synthetic environments, real-world data presents unique challenges for unsupervised decomposition.
-  </p>
+We evaluated our method across two synthetic D-NeRF scenes (BouncingBalls, JumpingJacks) and one real-world HyperNeRF scene (ChickChicken). Our findings indicate that while motion-aware gating improves metrics in controlled synthetic environments, real-world data presents unique challenges for unsupervised decomposition.  </p>
+
+  <h3 style="margin-top:2rem;">Regularization Settings</h3>
+
+<ul class="finding-list">
+  <li><strong>Reg-A:</strong> λ_static = 1e-3, λ_bin = 1e-3 — mild regularization</li>
+  <li><strong>Reg-B:</strong> λ_static = 2e-3, λ_bin = 1e-3 — stronger static penalty</li>
+  <li><strong>Reg-C:</strong> λ_static = 2e-3, λ_bin = 2e-3 — stronger on both</li>
+  <li><strong>Over-reg:</strong> λ_static = 1e-2 — collapse sanity check</li>
+</ul>
+
+<h3 style="margin-top:2rem;">Baseline vs. Reg-B Comparison</h3>
+
+<div class="viz-grid" style="margin-bottom: 2rem;">
+  <div class="viz-item">
+    <video width="100%" height="auto" autoplay loop muted playsinline>
+      <source src="bb_baseline.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p class="viz-caption">BouncingBalls (Baseline)</p>
+  </div>
+  <div class="viz-item">
+    <video width="100%" height="auto" autoplay loop muted playsinline>
+      <source src="bb_regb.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p class="viz-caption">BouncingBalls (Reg-B)</p>
+  </div>
+</div>
+
+<div class="viz-grid" style="margin-bottom: 2rem;">
+  <div class="viz-item">
+    <video width="100%" height="auto" autoplay loop muted playsinline>
+      <source src="jj_baseline.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p class="viz-caption">JumpingJacks (Baseline)</p>
+  </div>
+  <div class="viz-item">
+    <video width="100%" height="auto" autoplay loop muted playsinline>
+      <source src="jj_regb.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p class="viz-caption">JumpingJacks (Reg-B)</p>
+  </div>
+</div>
+
+<div class="viz-grid">
+  <div class="viz-item">
+    <video width="100%" height="auto" autoplay loop muted playsinline>
+      <source src="cc_baseline.mp4" type="video/mp4">
+    </video>
+    <p class="viz-caption">ChickChicken (Baseline)</p>
+  </div>
+  <div class="viz-item">
+    <video width="100%" height="auto" autoplay loop muted playsinline>
+      <source src="cc_regb.mp4" type="video/mp4">
+    </video>
+    <p class="viz-caption">ChickChicken (Reg-B)</p>
+  </div>
+</div>
 
   <div class="tab-bar">
     <button class="tab-btn active" onclick="showTab('bouncingballs', this)">BouncingBalls</button>
     <button class="tab-btn" onclick="showTab('jumpingjacks', this)">JumpingJacks</button>
-    <button class="tab-btn" onclick="showTab('hypernerf', this)">HyperNeRF (Real-World)</button>
+    <button class="tab-btn" onclick="showTab('hypernerf', this)">Hypernerf</button>
   </div>
 
+  <!-- BOUNCINGBALLS -->
   <div class="tab-panel active" id="tab-bouncingballs">
     <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">
-      <strong>Synthetic Scene:</strong> Clear foreground motion. All regularized variants improve over baseline. <strong>Reg-B</strong> achieves the highest PSNR (+0.28 dB).
+      D-NeRF strongly dynamic synthetic scene. All three stable regularized variants improve over baseline. Reg-B achieves the highest PSNR (+0.28 dB); Reg-C achieves the best SSIM and LPIPS scores.
     </p>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Method</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS-VGG ↓</th><th>MS-SSIM ↑</th></tr></thead>
+        <thead><tr><th>Method</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS-VGG ↓</th><th>LPIPS-Alex ↓</th><th>MS-SSIM ↑</th></tr></thead>
         <tbody>
-          <tr><td>Baseline 4DGS</td><td>40.68</td><td>0.9943</td><td>0.0154</td><td>0.9954</td></tr>
-          <tr><td>Reg-A</td><td>40.87</td><td>0.9945</td><td>0.0144</td><td>0.9956</td></tr>
-          <tr><td>Reg-B (Best PSNR)</td><td class="best">40.96</td><td>0.9945</td><td>0.0144</td><td>0.9956</td></tr>
-          <tr><td>Reg-C (Best SSIM)</td><td>40.90</td><td class="best">0.9947</td><td class="best">0.0136</td><td class="best">0.9957</td></tr>
+          <tr><td>Baseline 4DGS</td><td>40.68</td><td>0.9943</td><td>0.01536</td><td>0.00603</td><td>0.99540</td></tr>
+          <tr><td>Reg-A (λ_s=1e-3, λ_b=1e-3)</td><td>40.87</td><td>0.9945</td><td>0.01438</td><td>0.00563</td><td>0.99558</td></tr>
+          <tr><td>Reg-B (λ_s=2e-3, λ_b=1e-3)</td><td class="best">40.96</td><td>0.9945</td><td>0.01442</td><td>0.00523</td><td>0.99562</td></tr>
+          <tr><td>Reg-C (λ_s=2e-3, λ_b=2e-3)</td><td>40.90</td><td class="best">0.9947</td><td class="best">0.01362</td><td class="best">0.00509</td><td class="best">0.99568</td></tr>
+          <tr style="opacity:0.6"><td>Over-reg (λ_s=1e-2, λ_b=1e-3)</td><td>40.72</td><td>0.9943</td><td>0.01559</td><td>0.00597</td><td>0.99531</td></tr>
         </tbody>
       </table>
     </div>
-  </div>
+    <p class="table-caption">Reg-B shows the clearest static/dynamic separation (highest dynamic fraction and mask spread). Reg-C, despite its better reconstruction scores, produces a more conservative and compressed mask — illustrating the reconstruction–separability tradeoff.</p>
 
+
+    <h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion-Mask Diagnostics (end of training)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Method</th><th>Mean m</th><th>Std m</th><th>Dyn. frac.</th><th>Frac. m>0.4</th></tr></thead>
+        <tbody>
+          <tr><td>Early prototype (no reg.)</td><td>0.248</td><td>0.064</td><td>0.000</td><td>—</td></tr>
+          <tr><td>Reg-A</td><td>0.185</td><td>0.190</td><td>0.012</td><td>0.216</td></tr>
+          <tr><td>Reg-B</td><td>0.218</td><td class="best">0.249</td><td class="best">0.260</td><td class="best">0.388</td></tr>
+          <tr><td>Reg-C</td><td class="best">0.140</td><td>0.214</td><td>0.049</td><td>0.262</td></tr>
+          <tr style="opacity:0.6"><td>Over-reg</td><td>0.999</td><td>0.002</td><td>1.000</td><td>1.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div> 
   <div class="tab-panel" id="tab-jumpingjacks">
     <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">
-      <strong>Synthetic Scene:</strong> Human motion. Reg-B improves PSNR by <strong>+0.22 dB</strong>, while Reg-C returns to near-baseline quality, suggesting λ sensitivity.
+      D-NeRF human-motion synthetic scene...
     </p>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Method</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS-Alex ↓</th><th>MS-SSIM ↑</th></tr></thead>
+        <thead><tr><th>Method</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS-VGG ↓</th><th>LPIPS-Alex ↓</th><th>MS-SSIM ↑</th></tr></thead>
         <tbody>
-          <tr><td>Baseline 4DGS</td><td>35.40</td><td>0.9856</td><td>0.0127</td><td>0.9936</td></tr>
-          <tr><td>Reg-A</td><td>35.58</td><td class="best">0.9864</td><td class="best">0.0123</td><td class="best">0.9940</td></tr>
-          <tr><td>Reg-B</td><td class="best">35.62</td><td>0.9864</td><td>0.0126</td><td>0.9940</td></tr>
+          <tr><td>Baseline 4DGS</td><td>35.40</td><td>0.9856</td><td>0.01995</td><td>0.01266</td><td>0.99362</td></tr>
+          <tr><td>Reg-A (λ_s=1e-3, λ_b=1e-3)</td><td>35.58</td><td class="best">0.9864</td><td>0.01897</td><td class="best">0.01233</td><td class="best">0.99401</td></tr>
+          <tr><td>Reg-B (λ_s=2e-3, λ_b=1e-3)</td><td class="best">35.62</td><td>0.9864</td><td class="best">0.01895</td><td>0.01262</td><td>0.99400</td></tr>
+          <tr><td>Reg-C (λ_s=2e-3, λ_b=2e-3)</td><td>35.40</td><td>0.9859</td><td>0.01988</td><td>0.01314</td><td>0.99364</td></tr>
         </tbody>
       </table>
     </div>
+    <p class="table-caption">Best per column in bold blue. Reg-C returns to near-baseline quality on JumpingJacks, confirming that optimal regularization weights are scene-dependent.</p>
   </div>
 
-  <div class="tab-panel" id="tab-hypernerf">
-    <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">
-      <strong>Real-World Scene:</strong> Unlike synthetic tests, the baseline remains superior on most metrics. This highlights the difficulty of unsupervised gating in the presence of real-world capture artifacts.
-    </p>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Method</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS-VGG ↓</th><th>MS-SSIM ↑</th></tr></thead>
-        <tbody>
-          <tr><td class="best">Baseline 4DGS</td><td class="best">26.92</td><td class="best">0.7969</td><td class="best">0.3369</td><td>0.9107</td></tr>
-          <tr><td>Reg-A</td><td>26.87</td><td>0.7968</td><td>0.3422</td><td class="best">0.9111</td></tr>
-          <tr><td>Reg-B</td><td>26.91</td><td>0.7967</td><td>0.3440</td><td>0.9107</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <h3 style="font-size:1.1rem;font-weight:600;margin:2.5rem 0 1rem;">Internal Mask Behavior</h3>
-  <p>
-    Even when image metrics are similar, internal diagnostics show that stronger regularization ($L_{static}$ and $L_{bin}$) produces a cleaner separation of motion, as evidenced by the <strong>Dynamic Fraction</strong> and <strong>Mean Mask</strong> values.
+  <!-- HYPERNERF -->
+<div class="tab-panel" id="tab-hypernerf">
+  <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">
+    Real-world dynamic scene from HyperNeRF (CHICKCHICKEN). Unlike the synthetic D-NeRF scenes, the proposed method does not consistently improve reconstruction quality. The baseline 4DGS remains slightly better on most primary image metrics, highlighting a gap between synthetic and real-world behavior.
   </p>
+
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Scene</th><th>Method</th><th>Mean $m$</th><th>Std $m$</th><th>Dyn. Frac.</th><th>Binarization</th></tr></thead>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>PSNR ↑</th>
+          <th>SSIM ↑</th>
+          <th>LPIPS-VGG ↓</th>
+          <th>LPIPS-Alex ↓</th>
+          <th>MS-SSIM ↑</th>
+        </tr>
+      </thead>
       <tbody>
-        <tr><td>BouncingBalls</td><td>Reg-B</td><td>0.218</td><td>0.249</td><td>0.260</td><td>0.1086</td></tr>
-        <tr><td>JumpingJacks</td><td>Reg-B</td><td>0.511</td><td>0.052</td><td>0.676</td><td>0.2472</td></tr>
-        <tr><td>ChickChicken</td><td>Reg-B</td><td>0.415</td><td>0.488</td><td>0.419</td><td>0.0049</td></tr>
+        <tr>
+          <td>Baseline 4DGS</td>
+          <td class="best">26.92</td>
+          <td class="best">0.7969</td>
+          <td class="best">0.3369</td>
+          <td class="best">0.1854</td>
+          <td>0.9107</td>
+        </tr>
+        <tr>
+          <td>Reg-A</td>
+          <td>26.87</td>
+          <td>0.7968</td>
+          <td>0.3422</td>
+          <td>0.1862</td>
+          <td class="best">0.9111</td>
+        </tr>
+        <tr>
+          <td>Reg-B</td>
+          <td>26.91</td>
+          <td>0.7967</td>
+          <td>0.3440</td>
+          <td>0.1903</td>
+          <td>0.9107</td>
+        </tr>
       </tbody>
     </table>
   </div>
 
-  <div style="background: #f4f4f2; padding: 1.5rem; border-radius: 10px; margin-top: 2rem; border-left: 5px solid #2e7d32;">
-    <h4 style="margin-top: 0;">Discussion: The Tradeoff</h4>
-    <p style="font-size: 0.95rem; margin-bottom: 0;">
-      Our results confirm that <strong>reconstruction quality and mask interpretability are distinct objectives</strong>. In <em>JumpingJacks</em>, Reg-B achieved the best PSNR while maintaining a high binarization value (near 0.25), meaning the mask was relatively "soft." Conversely, in <em>ChickChicken</em>, Reg-B dramatically improved internal binarization (0.0049) without improving image quality. This suggests that a near-binary mask is not a prerequisite for high-fidelity rendering, but is necessary for meaningful static-dynamic decomposition.
+  <p class="table-caption">
+    The proposed method does not improve PSNR or LPIPS on this real-world scene. However, mask diagnostics still show stronger static–dynamic separation under higher regularization.
+  </p>
+</div>
+    
+    <h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion Mask Visualizations</h3>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">
+      Red/blue PLY exports: <strong style="color:#e040fb">red = high mask (dynamic)</strong>, <strong style="color:#5c6bc0">blue = low mask (static)</strong>.
     </p>
+    <div class="viz-grid">
+      <div class="viz-item">
+        <img src="finalproject_image1.png" alt="BouncingBalls Reg-A visualization" style="min-height:120px;">
+        <p class="viz-caption">Reg-A: λ<sub>s</sub>=1e-3, λ<sub>b</sub>=1e-3</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image2.png" alt="BouncingBalls Reg-B visualization" style="min-height:120px;">
+        <p class="viz-caption">Reg-B: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=1e-3</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image3.png" alt="BouncingBalls Reg-C visualization" style="min-height:120px;">
+        <p class="viz-caption">Reg-C: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=2e-3</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image4.png" alt="BouncingBalls Reg-A alt view" style="min-height:120px;">
+        <p class="viz-caption">Reg-A alt view</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image5.png" alt="BouncingBalls Reg-B alt view" style="min-height:120px;">
+        <p class="viz-caption">Reg-B alt view</p>
+      </div>
+      <div class="viz-item">
+        <img src="finalproject_image6.png" alt="BouncingBalls Reg-C alt view" style="min-height:120px;">
+        <p class="viz-caption">Reg-C alt view</p>
+      </div>
+    </div>
+    
+
   </div>
-</section>
+
+
+
+<!-- ── DISCUSSION ── -->
+<hr class="section-rule" />
+<section id="results">
   <h2>Key Findings & Analysis</h2>
 
   <p>
