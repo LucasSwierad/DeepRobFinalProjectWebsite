@@ -900,33 +900,7 @@
 
   </div>
 
-  
 
-  <!-- SUMMARY FINDINGS -->
-  <h3 style="font-size:1.1rem;font-weight:600;margin:2.5rem 0 0.8rem;">Key Findings</h3>
-  <ul class="finding-list">
-    <li><strong>+0.28 dB PSNR on BouncingBalls</strong> — Reg-B achieves the highest PSNR improvement. Reg-C achieves the best SSIM and LPIPS scores. All three stable variants beat baseline.</li>
-    <li><strong>+0.22 dB PSNR on JumpingJacks</strong> — Reg-B is again the best single choice. Reg-C, strong on BouncingBalls, regresses to baseline quality here, revealing scene-dependent tradeoffs.</li>
-    <li><strong>Reconstruction vs. separability tradeoff</strong> — On BouncingBalls, the setting that maximizes SSIM/LPIPS (Reg-C) is not the same as the one with the widest mask spread (Reg-B), showing that these objectives partially conflict.</li>
-    <li><strong>Three failure modes identified</strong> — (1) all-static collapse from the discarded sparsity-only regularizer; (2) all-dynamic collapse at Over-reg (λ<sub>static</sub>=10⁻²); (3) soft ambiguous masks partially resolved by the binarization loss.</li>
-    <li><strong>Reg-B is the most robust single setting</strong> (λ<sub>static</sub>=2×10⁻³, λ<sub>bin</sub>=1×10⁻³) — it achieves the best PSNR on both tested scenes simultaneously.</li>
-  </ul>
-</section>
-
-<section>
-  <h2>Key Finding: Quality vs. Separability</h2>
-
-  <p>
-    The hyperparameters that maximize reconstruction quality do not match those that maximize motion-mask separability.
-  </p>
-
-  <ul class="finding-list">
-    <li><strong>Reg-A:</strong> stable improvements across both scenes</li>
-    <li><strong>Reg-B:</strong> best PSNR and best separation</li>
-    <li><strong>Reg-C:</strong> best perceptual metrics but weaker generalization</li>
-    <li><strong>Over-reg:</strong> collapse to all-dynamic</li>
-  </ul>
-</section>
 
 <!-- ── DISCUSSION ── -->
 <hr class="section-rule" />
