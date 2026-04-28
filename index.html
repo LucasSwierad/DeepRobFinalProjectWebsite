@@ -679,24 +679,13 @@
 
 <ul style="margin-bottom: 1.5rem; line-height: 1.6;">
   <li><strong>Mean &amp; Std Dev:</strong> Overall distribution of the learned gate values.</li>
-  <li><strong>Dynamic Fraction:</strong> The percentage of the scene identified as moving, specifically the fraction where $m > 0.4$.</li>
+  <li><strong>Dynamic Fraction:</strong> The percentage of the scene identified as moving, specifically the fraction where m > 0.4.</li>
   <li><strong>Loss Components:</strong> Real-time values for the static-deformation and binarization regularizers.</li>
 </ul>
 
 <p>
   To analyze spatial behavior, the method exports specialized <strong>color-coded PLY point clouds</strong>. In these files, the RGB channels are mapped to mask intensity: <strong style="color: #d32f2f;">Red</strong> indicates high motion-mask values (predicted dynamic regions), while <strong style="color: #1976d2;">Blue</strong> indicates low values (predicted static regions). 
 </p>
-
-<blockquote>
-  <strong>Note:</strong> These visualizations are diagnostic tools for analyzing model behavior and should not be interpreted as ground-truth semantic segmentation labels.
-</blockquote>
-
-<div class="link-buttons" style="margin-top: 1.5rem;">
-  <a href="https://github.com/yuanren114514/ROB_430_Final_Project/blob/main/utils/mask_logger.py" target="_blank" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.5rem 1rem;">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; margin-right:6px; vertical-align:middle;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-    View <code>mask_logger.py</code> source
-  </a>
-</div>
 </section>
 
 <!-- ── RESULTS ── -->
