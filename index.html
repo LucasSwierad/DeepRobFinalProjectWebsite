@@ -979,6 +979,47 @@
   </div>
 </section>
 
+<hr class="section-rule" />
+<section id="future-work">
+  <h2>Future Work</h2>
+  
+  <p>
+    While our motion-mask gating provides a lightweight entry point for spatiotemporal interpretability, several avenues remain open for enhancing the robustness of unsupervised decomposition:
+  </p>
+
+  <ul style="list-style: none; padding-left: 0; margin-top: 1.5rem;">
+    <li style="margin-bottom: 1.2rem; display: flex; align-items: flex-start;">
+      <span style="color: #6b9e6b; margin-right: 12px; font-size: 1.2rem;">●</span>
+      <div>
+        <strong>Adaptive Regularization Schedules:</strong> 
+        Future iterations could employ a dynamic weighting scheme for $\lambda_{static}$ and $\lambda_{bin}$. By gradually increasing regularization pressure as the geometry stabilizes, the model could prioritize reconstruction in early phases and interpretability in later stages.
+      </div>
+    </li>
+    
+    <li style="margin-bottom: 1.2rem; display: flex; align-items: flex-start;">
+      <span style="color: #6b9e6b; margin-right: 12px; font-size: 1.2rem;">●</span>
+      <div>
+        <strong>Weak Supervision & Semantic Cues:</strong> 
+        Integrating coarse segmentation masks (e.g., from SAM2 or GroundingDINO) as a prior—rather than a hard constraint—could help ground the motion mask in physical reality while maintaining the benefits of joint optimization.
+      </div>
+    </li>
+
+    <li style="margin-bottom: 1.2rem; display: flex; align-items: flex-start;">
+      <span style="color: #6b9e6b; margin-right: 12px; font-size: 1.2rem;">●</span>
+      <div>
+        <strong>Real-World Dataset Diversity:</strong> 
+        Expanding evaluation to more complex, non-synthetic environments (beyond <em>ChickChicken</em>) will be critical to understanding how the unsupervised gate handles diverse lighting, occlusions, and camera noise.
+      </div>
+    </li>
+  </ul>
+
+  <div class="diagram-wrap" style="background: #fdfdfd; border-style: dashed; text-align: center; color: #888;">
+    <p style="font-size: 0.85rem; padding: 2rem;">
+      [Experimental visualization of future adaptive schedules would go here]
+    </p>
+  </div>
+</section>
+
 <!-- ── RELATED LINKS ── -->
 <hr class="section-rule" />
 <section>
