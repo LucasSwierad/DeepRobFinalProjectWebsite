@@ -637,6 +637,26 @@
     </div>
   </div>
 
+  <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">
+  Identifiability Limitation
+</h3>
+
+<p>
+  The motion-mask formulation introduces an inherent ambiguity. The renderer does not observe the mask and deformation independently, but only their product:
+</p>
+
+<div style="font-family: var(--mono); font-size: 0.9rem; background: #f5f5f2; padding: 0.8rem 1.2rem; border-radius: 8px; margin: 1rem 0; color: #333;">
+  m<sub>i</sub>(t) · Δμ<sub>i</sub>(t)
+</div>
+
+<p>
+  As a result, multiple configurations can produce similar rendered images. For example, a small mask with a large deformation can be equivalent to a large mask with a small deformation. This creates an identifiability issue: image reconstruction alone cannot uniquely determine whether motion should be attributed to the mask or to the deformation magnitude.
+</p>
+
+<p>
+  The binarization and static-deformation losses are introduced to partially resolve this ambiguity by encouraging the mask to take on interpretable values and discouraging deformation in low-mask regions. However, this ambiguity is not fully eliminated and contributes to the observed gap between reconstruction quality and mask separability.
+</p>
+
   <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">Notation Reference</h3>
   <div class="table-wrap notation-table">
     <table>
@@ -791,6 +811,58 @@
     <p class="table-caption">Best per column in bold blue. Reg-C returns to near-baseline quality on JumpingJacks, confirming that optimal regularization weights are scene-dependent.</p>
   </div>
 
+  <!-- HYPERNERF -->
+<div class="tab-panel" id="tab-hypernerf">
+  <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">
+    Real-world dynamic scene from HyperNeRF (CHICKCHICKEN). Unlike the synthetic D-NeRF scenes, the proposed method does not consistently improve reconstruction quality. The baseline 4DGS remains slightly better on most primary image metrics, highlighting a gap between synthetic and real-world behavior.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>PSNR ↑</th>
+          <th>SSIM ↑</th>
+          <th>LPIPS-VGG ↓</th>
+          <th>LPIPS-Alex ↓</th>
+          <th>MS-SSIM ↑</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Baseline 4DGS</td>
+          <td class="best">26.92</td>
+          <td class="best">0.7969</td>
+          <td class="best">0.3369</td>
+          <td class="best">0.1854</td>
+          <td>0.9107</td>
+        </tr>
+        <tr>
+          <td>Reg-A</td>
+          <td>26.87</td>
+          <td>0.7968</td>
+          <td>0.3422</td>
+          <td>0.1862</td>
+          <td class="best">0.9111</td>
+        </tr>
+        <tr>
+          <td>Reg-B</td>
+          <td>26.91</td>
+          <td>0.7967</td>
+          <td>0.3440</td>
+          <td>0.1903</td>
+          <td>0.9107</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="table-caption">
+    The proposed method does not improve PSNR or LPIPS on this real-world scene. However, mask diagnostics still show stronger static–dynamic separation under higher regularization.
+  </p>
+</div>
+
   <!-- SUMMARY FINDINGS -->
   <h3 style="font-size:1.1rem;font-weight:600;margin:2.5rem 0 0.8rem;">Key Findings</h3>
   <ul class="finding-list">
@@ -820,6 +892,22 @@
 <!-- ── DISCUSSION ── -->
 <section id="conclusion">
   <h2>Conclusions & Future Work</h2>
+
+  <h3 style="font-size:1.1rem;font-weight:600;margin:2rem 0 0.8rem;">
+  Comparison with SDD-4DGS
+</h3>
+
+<p>
+  SDD-4DGS proposes a more explicit static–dynamic decomposition by assigning a persistent dynamic coefficient to each Gaussian and redesigning the representation accordingly. In contrast, our method predicts a motion coefficient from the shared deformation feature at each forward pass.
+</p>
+
+<p>
+  This difference leads to a tradeoff. SDD-4DGS reports larger and more consistent reconstruction improvements, likely due to its stronger structural decoupling. Our approach, however, is significantly simpler: it requires only a lightweight additional head and does not modify Gaussian storage, cloning, pruning, or optimizer state.
+</p>
+
+<p>
+  As a result, the proposed method can be integrated into existing 4DGS pipelines with minimal engineering overhead, but achieves more modest and scene-dependent reconstruction gains.
+</p>
 
   <ul class="finding-list">
     <li><strong>Consistent reconstruction gains</strong> across PSNR, SSIM, and LPIPS on dynamic scenes.</li>
