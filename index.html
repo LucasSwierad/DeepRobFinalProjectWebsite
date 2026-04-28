@@ -870,44 +870,60 @@ We evaluated our method across two synthetic D-NeRF scenes (BouncingBalls, Jumpi
   <p class="table-caption">
     The proposed method does not improve PSNR or LPIPS on this real-world scene. However, mask diagnostics still show stronger static–dynamic separation under higher regularization.
   </p>
-<h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion Mask Visualizations</h3>
-<p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">
-  Red/blue PLY exports: <strong style="color:#d32f2f">red = high mask (dynamic)</strong>, <strong style="color:#1976d2">blue = low mask (static)</strong>.
-</p>
+<p class="table-caption">
+    The proposed method does not improve PSNR or LPIPS on this real-world scene. However, mask diagnostics still show stronger static–dynamic separation under higher regularization.
+  </p>
 
-<div style="background: #f8f9fa; padding: 0.5rem 1rem; border-left: 4px solid #444; margin-bottom: 1rem;">
-  <h4 style="margin: 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: #333;">Scene: BouncingBalls (Synthetic)</h4>
-</div>
+  <h3 style="font-size:1.05rem;font-weight:600;margin:1.8rem 0 0.6rem;">Motion Mask Visualizations</h3>
+  <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">
+    Red/blue PLY exports: <strong style="color:#d32f2f">red = high mask (dynamic)</strong>, <strong style="color:#1976d2">blue = low mask (static)</strong>.
+  </p>
 
-<div class="viz-grid" style="margin-bottom: 2rem;"> <div class="viz-item">
-    <img src="finalproject_image1.png" alt="BouncingBalls Reg-A" style="min-height:120px;">
-    <p class="viz-caption">Reg-A: λ<sub>s</sub>=1e-3, λ<sub>b</sub>=1e-3</p>
+  <div style="background: #f8f9fa; padding: 0.5rem 1rem; border-left: 4px solid #444; margin-bottom: 1rem;">
+    <h4 style="margin: 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: #333;">Scene: BouncingBalls (Synthetic)</h4>
   </div>
-  <div class="viz-item">
-    <img src="finalproject_image2.png" alt="BouncingBalls Reg-B" style="min-height:120px;">
-    <p class="viz-caption">Reg-B: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=1e-3</p>
-  </div>
-  <div class="viz-item">
-    <img src="finalproject_image3.png" alt="BouncingBalls Reg-C" style="min-height:120px;">
-    <p class="viz-caption">Reg-C: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=2e-3</p>
-  </div>
-</div> <div style="background: #f8f9fa; padding: 0.5rem 1rem; border-left: 4px solid #444; margin-bottom: 1rem;">
-  <h4 style="margin: 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: #333;">Scene: JumpingJacks (Synthetic)</h4>
-</div>
 
-<div class="viz-grid"> <div class="viz-item">
-    <img src="finalproject_image4.png" alt="JumpingJacks Reg-A" style="min-height:120px;">
-    <p class="viz-caption">Reg-A: λ<sub>s</sub>=1e-3, λ<sub>b</sub>=1e-3</p>
+  <div class="viz-grid" style="margin-bottom: 2rem;"> 
+    <div class="viz-item">
+      <img src="finalproject_image1.png" alt="BouncingBalls Reg-A" style="min-height:120px;">
+      <p class="viz-caption">Reg-A: λ<sub>s</sub>=1e-3, λ<sub>b</sub>=1e-3</p>
+    </div>
+    <div class="viz-item">
+      <img src="finalproject_image2.png" alt="BouncingBalls Reg-B" style="min-height:120px;">
+      <p class="viz-caption">Reg-B: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=1e-3</p>
+    </div>
+    <div class="viz-item">
+      <img src="finalproject_image3.png" alt="BouncingBalls Reg-C" style="min-height:120px;">
+      <p class="viz-caption">Reg-C: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=2e-3</p>
+    </div>
+  </div> 
+
+  <div style="background: #f8f9fa; padding: 0.5rem 1rem; border-left: 4px solid #444; margin-bottom: 1rem;">
+    <h4 style="margin: 0; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.05em; color: #333;">Scene: JumpingJacks (Synthetic)</h4>
   </div>
-  <div class="viz-item">
-    <img src="finalproject_image5.png" alt="JumpingJacks Reg-B" style="min-height:120px;">
-    <p class="viz-caption">Reg-B: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=1e-3</p>
-  </div>
-  <div class="viz-item">
-    <img src="finalproject_image6.png" alt="JumpingJacks Reg-C" style="min-height:120px;">
-    <p class="viz-caption">Reg-C: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=2e-3</p>
-  </div>
-</div> ```
+
+  <div class="viz-grid"> 
+    <div class="viz-item">
+      <img src="finalproject_image4.png" alt="JumpingJacks Reg-A" style="min-height:120px;">
+      <p class="viz-caption">Reg-A: λ<sub>s</sub>=1e-3, λ<sub>b</sub>=1e-3</p>
+    </div>
+    <div class="viz-item">
+      <img src="finalproject_image5.png" alt="JumpingJacks Reg-B" style="min-height:120px;">
+      <p class="viz-caption">Reg-B: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=1e-3</p>
+    </div>
+    <div class="viz-item">
+      <img src="finalproject_image6.png" alt="JumpingJacks Reg-C" style="min-height:120px;">
+      <p class="viz-caption">Reg-C: λ<sub>s</sub>=2e-3, λ<sub>b</sub>=2e-3</p>
+    </div>
+  </div> 
+
+  <hr class="section-rule" />
+  <section id="discussion"> <h2>Key Findings & Analysis</h2>
+    <p>
+      Our experiments reveal a nuanced relationship between <strong>motion-aware regularization</strong> and <strong>reconstruction fidelity</strong>...
+    </p>
+  </section>
+
 
 
 <!-- ── DISCUSSION ── -->
