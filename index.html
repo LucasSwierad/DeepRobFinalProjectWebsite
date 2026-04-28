@@ -686,9 +686,7 @@
   <p>
     All experiments use D-NeRF synthetic scenes. We focus on <strong>BouncingBalls</strong> (bouncing spheres against a static floor) and <strong>JumpingJacks</strong> (an animated figure), chosen for strong foreground motion. Training uses 20,000 total iterations, 3,000 coarse iterations, deformation depth 0, network width 64, and multi-resolution scales [1, 2], with PyTorch 1.13.1 and CUDA 11.6. Evaluation uses the provided <code>metrics.py</code> script reporting PSNR, SSIM, LPIPS-VGG, LPIPS-Alex, MS-SSIM, and D-SSIM.
   </p>
-  <p style="font-size:0.9rem; color: var(--text-muted);">
-    We compare: <strong>Baseline</strong> (original 4DGS); <strong>Reg-A</strong> (λ<sub>static</sub> = 1×10⁻³, λ<sub>bin</sub> = 1×10⁻³); <strong>Reg-B</strong> (λ<sub>static</sub> = 2×10⁻³, λ<sub>bin</sub> = 1×10⁻³); <strong>Reg-C</strong> (λ<sub>static</sub> = 2×10⁻³, λ<sub>bin</sub> = 2×10⁻³); and <strong>Over-reg</strong> (λ<sub>static</sub> = 1×10⁻², λ<sub>bin</sub> = 1×10⁻³) as a collapse sanity check.
-  </p>
+
   <h3 style="margin-top:2rem;">Regularization Settings</h3>
 
 <ul class="finding-list">
